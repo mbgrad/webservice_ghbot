@@ -33,7 +33,7 @@ async def pull_request_merged(event, gh, *args, **kwargs):
 @router.register("issue_comment", action="created")
 async def issue_comment_created_event(event, gh, *args, **kwargs):
     """thumbs up my own comments"""
-    url=f"{event.data["comment"]["url"]}/reactions"
+    url=f"{event.data['comment']['url']}/reactions"
     user = event.data["comment"]["user"]["login"]
     if user == "mbgrad":
         await gh.post(url,
