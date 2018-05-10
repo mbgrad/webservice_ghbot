@@ -20,7 +20,7 @@ async def issue_opened_event(event, gh, *args, **kwargs):
     pass
 
 async def main(request):
-    async def main(request):
+    
     # read the GitHub webhook payload
     body = await request.read()
 
