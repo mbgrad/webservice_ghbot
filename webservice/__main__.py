@@ -19,6 +19,28 @@ async def issue_opened_event(event, gh, *args, **kwargs):
     await gh.post(url, data={"body": message})
     pass
 
+@router.register("pull_request", action="closed")
+async def pull_request_merged(event, gh, *args, **kwargs):
+    """ Whenever a pull request is merged, say thanks """
+    url = event.data["pull_request"]["comments_url"]
+    author = event.data["pull_request"]["user"]["login"]
+    is_merged = event.data["pull_request"]["merged"]
+    
+    if is_merged:
+        message = f"thanks for the PR @{user}"
+        await gh.post(url, data={"body":message})
+
+@router.register("issue_comment", action="created")
+async def issue_comment_created_event(event, gh, *args, **kwargs):
+    """thumbs up my own comments"""
+    url=f"{event.data["comment"]["url"]}/reactions"
+    user = event.data["comment"]["user"]["login"]
+    if user == "mbgrad":
+        await gh.post(url,
+                      data={'content':'+1'},
+                      accept="application/vnd.github.squirrel-girl-preview+json"
+                      )
+
 async def main(request):
     
     # read the GitHub webhook payload
